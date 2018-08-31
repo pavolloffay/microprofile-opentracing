@@ -39,7 +39,6 @@ import org.eclipse.microprofile.opentracing.tck.tracer.ConsumableTree;
 import org.eclipse.microprofile.opentracing.tck.tracer.TestSpan;
 import org.eclipse.microprofile.opentracing.tck.tracer.TestSpanTree;
 import org.eclipse.microprofile.opentracing.tck.tracer.TestTracer;
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.arquillian.testng.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -68,8 +67,7 @@ abstract class OpenTracingBaseTests extends Arquillian {
      *
      * @return the Deployed apps
      */
-    @Deployment
-    public static WebArchive createDeployment() {
+    public static WebArchive createBasicDeployment() {
 
         File[] files = Maven.resolver()
             .resolve(
@@ -79,7 +77,7 @@ abstract class OpenTracingBaseTests extends Arquillian {
             .withTransitivity().asFile();
 
         WebArchive war = ShrinkWrap.create(WebArchive.class, "opentracing.war")
-            .addPackages(true, OpentracingClientTests.class.getPackage())
+            .addPackages(true, OpentracingClientBaseTests.class.getPackage())
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsLibraries(files);
 

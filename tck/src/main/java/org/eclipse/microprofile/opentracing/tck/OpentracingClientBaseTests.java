@@ -55,7 +55,7 @@ import io.opentracing.tag.Tags;
  * Opentracing TCK tests.
  * @author <a href="mailto:steve.m.fontes@gmail.com">Steve Fontes</a>
  */
-public class OpentracingClientTests extends OpenTracingBaseTests {
+public abstract class OpentracingClientBaseTests extends OpenTracingBaseTests {
 
     /**
      * Test that server endpoint is adding standard tags
