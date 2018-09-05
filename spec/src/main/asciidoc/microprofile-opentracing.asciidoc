@@ -129,6 +129,10 @@ The default operation name of the new Span for the incoming request is
 <HTTP method>:<package name>.<class name>.<method name>
 ```
 
+The operation name can be changed via MicroProfile config configuration property `mp.opentracing.server-operation-name-provider`.
+The implementation has to provide `path` based operation name. In this case the span operation name
+consists of `@Path` values annotations.
+
 ===== Server Span tags
 Spans created for incoming requests will have the following tags added by default:
 

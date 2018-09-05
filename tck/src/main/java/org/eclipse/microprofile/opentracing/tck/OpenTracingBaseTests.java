@@ -258,7 +258,7 @@ abstract class OpenTracingBaseTests extends Arquillian {
      *
      * @param message The debug message.
      */
-    static void debug(String message) {
+    void debug(String message) {
         Reporter.log(message);
     }
 

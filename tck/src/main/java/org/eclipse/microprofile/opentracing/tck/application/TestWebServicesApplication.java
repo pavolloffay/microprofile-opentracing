@@ -53,6 +53,7 @@ public class TestWebServicesApplication extends Application {
             TracerWebService.class,
             TestServerWebServices.class,
             TestServerSkipAllWebServices.class,
+            WildcardClassService.class,
             TestServerWebServicesWithOperationName.class,
             JacksonJsonProvider.class));
     }

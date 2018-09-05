@@ -63,6 +63,9 @@ public abstract class OpentracingClientBaseTests extends OpenTracingBaseTests {
     @Test
     @RunAsClient
     private void testStandardTags() throws InterruptedException {
+        System.out.println(OpenTracingBaseTests.class.getName());
+        System.out.println("testStandardTags");
+
         Response response = executeRemoteWebServiceRaw(TestServerWebServices.REST_TEST_SERVICE_PATH,
             TestServerWebServices.REST_SIMPLE_TEST, Status.OK);
         response.close();
@@ -93,6 +96,7 @@ public abstract class OpentracingClientBaseTests extends OpenTracingBaseTests {
         );
         assertEqualTrees(spans, expectedTree);
     }
+
 
     /**
      * Test various Traced annotations.

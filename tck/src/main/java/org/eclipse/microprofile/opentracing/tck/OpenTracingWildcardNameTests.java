@@ -21,12 +21,22 @@ package org.eclipse.microprofile.opentracing.tck;
 
 import io.opentracing.tag.Tags;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import org.eclipse.microprofile.config.spi.ConfigSource;
+import org.eclipse.microprofile.opentracing.tck.application.WildcardClassService;
+import org.eclipse.microprofile.opentracing.tck.tracer.TestSpan;
+import org.eclipse.microprofile.opentracing.tck.tracer.TestSpanTree;
+import org.eclipse.microprofile.opentracing.tck.tracer.TestSpanTree.TreeNode;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.testng.annotations.Test;
 
 /**
  * @author Pavol Loffay
@@ -79,6 +89,7 @@ public class OpenTracingWildcardNameTests extends OpentracingClientBaseTests {
                 if (!classPath.value().startsWith("/")) {
                     operationName.append("/");
                 }
+                debug(classPath.value());
                 operationName.append(classPath.value());
             }
             if (!classPath.value().endsWith("/")) {
@@ -88,8 +99,9 @@ public class OpenTracingWildcardNameTests extends OpentracingClientBaseTests {
                 Path methodPath = method.getAnnotation(Path.class);
                 if (methodPath != null && methodPath.value().equals(javaMethod)) {
                     String methodPathStr = methodPath.value();
+                    debug(methodPathStr);
                     if (methodPathStr.startsWith("/")) {
-                        methodPathStr.replaceFirst("/", "");
+                        methodPathStr = methodPathStr.replaceFirst("/", "");
                     }
                     operationName.append(methodPathStr);
                 }
@@ -98,5 +110,42 @@ public class OpenTracingWildcardNameTests extends OpentracingClientBaseTests {
             return operationName.toString();
         }
         return super.getOperationName(spanKind, httpMethod, clazz, javaMethod);
+    }
+
+    /**
+     * Test that server endpoint is adding standard tags
+     */
+    @Test
+    @RunAsClient
+    private void testWildcard() throws InterruptedException {
+        Response response = executeRemoteWebServiceRaw("wildcard/10/foo",
+            "getFoo/ten", Status.OK);
+        response.close();
+
+        TestSpanTree spans = executeRemoteWebServiceTracerTree();
+
+        TestSpanTree expectedTree = new TestSpanTree(
+            new TreeNode<>(
+                new TestSpan(
+                    getOperationName(
+                        Tags.SPAN_KIND_SERVER,
+                        HttpMethod.GET,
+                        WildcardClassService.class,
+                        WildcardClassService.METHOD_PATH
+                        ),
+                    getExpectedSpanTags(
+                        Tags.SPAN_KIND_SERVER,
+                        HttpMethod.GET,
+                        "wildcard/10/foo",
+                        "getFoo/ten",
+                        null,
+                        Status.OK.getStatusCode(),
+                        JAXRS_COMPONENT
+                    ),
+                    Collections.emptyList()
+                )
+            )
+        );
+        assertEqualTrees(spans, expectedTree);
     }
 }
