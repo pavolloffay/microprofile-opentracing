@@ -19,19 +19,21 @@
 
 package org.eclipse.microprofile.opentracing.tck.application;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
+import java.util.Set;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
 /**
  * @author Pavol Loffay
  */
-@WebServlet(value = "/metrics/*")
-public class MetricsServlet extends HttpServlet {
+@ApplicationPath("/health")
+public class HealthApplication extends Application {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        resp.setStatus(200);
+    public Set<Class<?>> getClasses() {
+        Set<Class<?>> classes = new HashSet<>();
+        classes.add(HealthService.class);
+        return classes;
     }
 }

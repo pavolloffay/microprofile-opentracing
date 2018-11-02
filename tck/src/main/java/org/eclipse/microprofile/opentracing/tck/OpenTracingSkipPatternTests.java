@@ -127,12 +127,14 @@ public class OpenTracingSkipPatternTests extends OpenTracingBaseTests {
     @RunAsClient
     private void testHealthNotTraced() {
         Client client = ClientBuilder.newClient();
+        // TODO does deployment URL contains context?
+        System.out.println("\n\n\n\n\n" + deploymentURL.toString());
         String url = String.format("%shealth", deploymentURL.toString());
         debug("Executing " + url);
 
         WebTarget target = client.target(url);
         Response response = target.request().get();
-        Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals(response.getStatus(), 200);
 
         TestSpanTree spans = executeRemoteWebServiceTracerTree();
         assertEqualTrees(spans, new TestSpanTree());
@@ -147,7 +149,7 @@ public class OpenTracingSkipPatternTests extends OpenTracingBaseTests {
 
         WebTarget target = client.target(url);
         Response response = target.request().get();
-        Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals(response.getStatus(), 200);
 
         TestSpanTree spans = executeRemoteWebServiceTracerTree();
         assertEqualTrees(spans, new TestSpanTree());
@@ -162,7 +164,7 @@ public class OpenTracingSkipPatternTests extends OpenTracingBaseTests {
 
         WebTarget target = client.target(url);
         Response response = target.request().get();
-        Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals(response.getStatus(), 200);
 
         TestSpanTree spans = executeRemoteWebServiceTracerTree();
         assertEqualTrees(spans, new TestSpanTree());
@@ -177,7 +179,7 @@ public class OpenTracingSkipPatternTests extends OpenTracingBaseTests {
 
         WebTarget target = client.target(url);
         Response response = target.request().get();
-        Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals(response.getStatus(), 200);
 
         TestSpanTree spans = executeRemoteWebServiceTracerTree();
         assertEqualTrees(spans, new TestSpanTree());
@@ -192,7 +194,7 @@ public class OpenTracingSkipPatternTests extends OpenTracingBaseTests {
 
         WebTarget target = client.target(url);
         Response response = target.request().get();
-        Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals(response.getStatus(), 200);
 
         TestSpanTree spans = executeRemoteWebServiceTracerTree();
         assertEqualTrees(spans, new TestSpanTree());
@@ -207,7 +209,7 @@ public class OpenTracingSkipPatternTests extends OpenTracingBaseTests {
 
         WebTarget target = client.target(url);
         Response response = target.request().get();
-        Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals(response.getStatus(), 200);
 
         TestSpanTree spans = executeRemoteWebServiceTracerTree();
         assertEqualTrees(spans, new TestSpanTree());
